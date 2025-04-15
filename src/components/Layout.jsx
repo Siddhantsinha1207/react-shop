@@ -69,13 +69,17 @@ function Layout() {
 
     console.log(tempProducts);
 
-    // const filteredProducts = products.filter((product) =>
-    //   product.category.includes(event.target.name)
-    // );
-
-    const filteredProducts = products.filter((prod) => {
-      checkState[prod.category];
+    const filteredProducts = products.filter((product) => {
+      if (event.target.checked) {
+        return product.category.includes(event.target.name);
+      } else {
+        return product;
+      }
     });
+
+    // const filteredProducts = products.filter((prod) => {
+    //   checkState[prod.category];
+    // });
 
     setTempProducts(filteredProducts);
   };
