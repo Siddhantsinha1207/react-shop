@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Input from "./ui/Input";
 import ProductsData from "./ui/ProductsData";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import CustomCheckbox from "./ui/Checkbox";
 const Main = styled.main`
   display: flex;
@@ -11,10 +11,10 @@ const Main = styled.main`
 function Layout() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-
   const [searchProducts, setSearchProducts] = useState("");
-
   const [tempProducts, setTempProducts] = useState([]);
+
+  const [cart, setCart] = useState(0);
 
   const [checkState, setCheckState] = useState({
     jewelery: false,
@@ -77,22 +77,8 @@ function Layout() {
       }
     });
 
-    // const filteredProducts = products.filter((prod) => {
-    //   checkState[prod.category];
-    // });
-
     setTempProducts(filteredProducts);
   };
-
-  // if (checkState.electronics) {
-  //   console.log("sidd");
-  //   const filteredProducts = products.filter((product) =>
-  //     product.category.includes("electronics")
-  //   );
-  //   setTempProducts(filteredProducts);
-  // } else {
-  //   setTempProducts(products);
-  // }
 
   return (
     <>
@@ -102,15 +88,25 @@ function Layout() {
       <section style={{ display: "flex", gap: "1rem" }}>
         <aside>
           <h4>All Categories</h4>
-          <CustomCheckbox onChange={handleChange} checkState={checkState} />
+          <div>
+            <CustomCheckbox onChange={handleChange} checkState={checkState} />
+          </div>
+          <div>
+            <p>By Rating</p>
+          </div>
         </aside>
         <Main>
           <Input
             searchProducts={searchProducts}
             onChange={handleSearchProducts}
           />
-          <ProductsData products={tempProducts} />
+          <Suspense fallback={<p>Loading...</p>}>
+            <ProductsData products={tempProducts} />
+          </Suspense>
         </Main>
+        <aside style={{ margin: "0 auto", position: "sticky" }}>
+          <h3>Cart</h3>
+        </aside>
       </section>
     </>
   );
